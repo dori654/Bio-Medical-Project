@@ -136,6 +136,8 @@ class BloodBankApp:
             ttk.Button(main_frame, text="Issue Blood", command=self.issue_blood_gui).pack(pady=10, fill=tk.X)
             ttk.Button(main_frame, text="Emergency Blood Issue", command=self.emergency_blood_gui).pack(pady=10,
                                                                                                         fill=tk.X)
+            ttk.Button(main_frame, text="View Appointments", command=self.view_appointments_gui).pack(pady=10,
+                                                                                                      fill=tk.X)
         ttk.Button(main_frame, text="Export Records", command=self.export_gui).pack(pady=10, fill=tk.X)
 
     # Manage users (Admin)
@@ -528,10 +530,10 @@ class BloodBankApp:
         for idx, appointment in enumerate(appointments):
             appointment_info = f"{appointment[1]}, {appointment[2]}, {appointment[3]} {appointment[4]}"
             ttk.Label(frame, text=appointment_info).grid(row=idx, column=0, pady=5)
-
-            ttk.Button(frame, text="Delete",
-                       command=lambda appt_id=appointment[0]: self.delete_appointment(appt_id, view_window)).grid(
-                row=idx, column=1, pady=5)
+            if self.current_user_role in ["admin", "user"]:
+                ttk.Button(frame, text="Delete",
+                           command=lambda appt_id=appointment[0]: self.delete_appointment(appt_id, view_window)).grid(
+                    row=idx, column=1, pady=5)
 
     def delete_appointment(self, appointment_id, view_window):
         conn = sqlite3.connect('blood_bank.db')
